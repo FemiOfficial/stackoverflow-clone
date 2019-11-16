@@ -1,11 +1,16 @@
 /* eslint-disable class-methods-use-this */
 class Response {
   authSuccess(res, status, token, data, message) {
+    const userdata = {
+      email: data.email,
+      username: data.username,
+      githubUsername: data.githubUsername,
+    };
     return res.status(status).json({
       status,
       message,
       token,
-      data,
+      data: userdata,
     });
   }
 
@@ -42,5 +47,13 @@ class Response {
       message: error,
     });
   }
+
+  handleValidationError(res, status, error) {
+    return res.status(status).json({
+      status,
+      message: 'Incomplete(Invalid) Request Payload',
+      error,
+    });
+  }
 }
-export default new Response();
+module.exports = new Response();

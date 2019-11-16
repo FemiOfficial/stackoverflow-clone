@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable class-methods-use-this */
 /* eslint-disable no-console */
 import moment from 'moment';
 

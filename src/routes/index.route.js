@@ -3,6 +3,6 @@ import authRoutes from './auth.route';
 
 const indexRouter = express.Router();
 
-indexRouter.use('auth', authRoutes);
+indexRouter.use('/auth', authRoutes);
 
 export default indexRouter;

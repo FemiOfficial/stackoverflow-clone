@@ -9,4 +9,11 @@ globals:
 parserOptions:
   ecmaVersion: 2018
   sourceType: module
-rules: {}
+rules: {
+  "class-methods-use-this": "off",
+  "no-param-reassign": "off",
+  "import/named": "off",
+  "guard-for-in": "off",
+  "no-restricted-syntax": "off",
+  "consistent-return": "off"
+}

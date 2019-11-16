@@ -1,14 +1,46 @@
-import { success, handleError, authSuccess } from '../Helpers/Response';
+import Response from '../Helpers/Response';
 import codes from '../Helpers/statusCodes';
+import utils from '../Helpers/utils';
+import { registerUser, checkUserByUsername, checkUserByEmail } from '../services/auth.services';
 
 class AuthControllers {
-    async register() {
+  async register(request, response) {
+    try {
+      const { body } = request;
+      const checkbyusername = await checkUserByUsername(body.username);
+      const checkbyemail = await checkUserByEmail(body.email);
+      if (checkbyusername !== null) {
+        return Response.handleError(response, codes.badRequest, 'username already taken');
+      }
+      if (checkbyemail !== null) {
+        return Response.handleError(response, codes.badRequest, 'email already taken');
+      }
+      const data = await registerUser(body);
 
+      return Response.authSuccess(response, codes.success, data.accessToken, data.newuser, 'user registered sucessfully');
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
     }
+  }
 
-    async login() {
+  async login(request, response) {
+    try {
+      const { body } = request;
+      const user = await checkUserByUsername(body.username);
 
+      if (user === null) {
+        return Response.handleError(response, codes.badRequest, 'Invalid username');
+      }
+      if (!utils.isvalidpassword(body.password, user.password)) {
+        return Response.handleError(response, codes.badRequest, 'Invalid password');
+      }
+      const token = utils.generateAccessToken(user, process.env.API_SECRET_KEY);
+
+      return Response.authSuccess(response, codes.success, token, user, 'user login sucessfully');
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
     }
+  }
 }
 
 export default new AuthControllers();
