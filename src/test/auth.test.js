@@ -59,7 +59,7 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
       email: 'test33@gmail.com',
     },
   };
-  describe('POST /v1/auth/signup', () => {
+  describe('POST /v1/auth/signup && /v1/auth/signin', () => {
     it('create a new user', (done) => {
       chai.request(app)
         .post('/v1/auth/signup')

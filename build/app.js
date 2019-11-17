@@ -32,7 +32,7 @@ var _config = require('./config/config');
 
 var _config2 = _interopRequireDefault(_config);
 
-var _Logger = require('./Helpers/Logger');
+var _Logger = require('./helpers/Logger');
 
 var _Logger2 = _interopRequireDefault(_Logger);
 

@@ -1,9 +1,37 @@
+import jwt from 'jsonwebtoken';
 import { isEmpty, isEmail, isAlphanumeric } from 'validator';
-import { handleValidationError } from '../Helpers/Response';
-import codes from '../Helpers/statusCodes';
-
+import { handleValidationError, handleError } from '../helpers/Response';
+import codes from '../helpers/statusCodes';
 
 class AuthVlidations {
+  validateAccessToken(request, response, next) {
+    const authToken = request.body.token || request.query.token
+      || request.headers['x-access-token']
+      || request.headers.Authorization || request.headers.authorization;
+
+    if (!authToken) {
+      return handleError(response, codes.badRequest,
+        'token must be provided');
+    }
+    try {
+      const decoded = jwt.decode(request.headers.authorization);
+
+      if (Date.now() >= decoded.exp * 1000) {
+        return handleError(response, codes.unAuthorized, 'token expired!');
+      }
+      const verified = jwt.verify(request.headers.authorization, process.env.API_SECRET_KEY);
+
+      if (!verified) {
+        return handleError(response, codes.badRequest,
+          'invalid token provided');
+      }
+
+      next();
+    } catch (error) {
+      return handleError(response, codes.serverError, error);
+    }
+  }
+
   validateLoginPayload(request, response, next) {
     try {
       const { body } = request;

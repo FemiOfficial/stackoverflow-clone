@@ -19,6 +19,12 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Utils = {
+  getUserFromToken: function getUserFromToken(request) {
+    var token = request.body.token || request.query.token || request.headers['x-access-token'] || request.headers.Authorization || request.headers.authorization;
+
+    var authToken = _jsonwebtoken2.default.verify(token, process.env.API_SECRET_KEY);
+    return authToken;
+  },
   hashpassword: function hashpassword(pwd) {
     var salt = _bcrypt2.default.genSaltSync(15);
     var password = _bcrypt2.default.hashSync(pwd, salt);
@@ -29,7 +35,6 @@ var Utils = {
     return isValid;
   },
   generateAccessToken: function generateAccessToken(data, key) {
-
     var payload = {
       username: data.username,
       githubUsername: data.githubUsername,

@@ -16,17 +16,6 @@ class Response {
 
   success(res, status, data, message, purpose) {
     switch (purpose) {
-      case 'verifynumber':
-        return res.status(status).json({
-          status,
-          message,
-          userCode: data,
-        });
-      case 'completeresetpassword':
-        return res.status(status).json({
-          status,
-          message,
-        });
       case 'nodata':
         return res.status(status).json({
           status,

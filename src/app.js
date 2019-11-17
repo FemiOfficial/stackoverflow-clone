@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import bodyparser from 'body-parser';
 import cors from 'cors';
 import config from './config/config';
-import Logger from './Helpers/Logger';
+import Logger from './helpers/Logger';
 import indexv1Route from './routes/index.route';
 
 dotenv.config();

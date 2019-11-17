@@ -13,11 +13,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var QuestionSchema = new _mongoose2.default.Schema({
   user: Object,
   title: String,
-  tags: String,
+  tags: Array,
   body: String,
-  answered: Boolean,
-  answer_count: Number,
-  view_count: Number
+  answered: {
+    type: Boolean,
+    default: false
+  },
+  answer_count: {
+    type: Number,
+    default: 0
+  },
+  view_count: {
+    type: Number,
+    default: 0
+  }
 }, { timestamps: true });
 
 var QuestionsModel = _mongoose2.default.model('Questions', QuestionSchema);

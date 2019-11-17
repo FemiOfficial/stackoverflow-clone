@@ -73,10 +73,9 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
       email: 'test33@gmail.com'
     }
   };
-  describe('POST /v1/auth/signup', function () {
+  describe('POST /v1/auth/signup && /v1/auth/signin', function () {
     it('create a new user', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.validReg).end(function (err, res) {
-
         expect(res.status).to.eqls(201);
         expect(res.body).to.have.property('token');
         expect(res.body).to.have.property('data');
@@ -87,7 +86,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
     });
     it('returns an error for duplicate email on registration', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.reg409).end(function (err, res) {
-
         expect(res.status).to.eqls(409);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -98,7 +96,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
     });
     it('returns an error for duplicate username', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.reg409_2).end(function (err, res) {
-
         expect(res.status).to.eqls(409);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -109,7 +106,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
     });
     it('throws error for invalid payload', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.reg400_1).end(function (err, res) {
-
         expect(res.status).to.eqls(400);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -121,7 +117,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
     });
     it('throws error for invalid payload including email validation error', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.invalidEmail).end(function (err, res) {
-
         expect(res.status).to.eqls(400);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -133,7 +128,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
     });
     it('throws error for invalid payload', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.invalidPassword).end(function (err, res) {
-
         expect(res.status).to.eqls(400);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -146,7 +140,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
     });
     it('should log user in successfully', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signin').send(testcases.validSignIn).end(function (err, res) {
-
         expect(res.status).to.eqls(200);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -160,7 +153,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
     });
     it('throws error with invalid password', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signin').send(testcases.invalidSignIn).end(function (err, res) {
-
         expect(res.status).to.eqls(400);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -173,7 +165,6 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
 
     it('throws error with invalid username', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signin').send(testcases.invalidUsername).end(function (err, res) {
-
         expect(res.status).to.eqls(400);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');
@@ -184,9 +175,8 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
       });
     });
 
-    it('throw error with invalid request payload', function (done) {
+    it('throws error with invalid login request payload', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signin').send({}).end(function (err, res) {
-
         expect(res.status).to.eqls(400);
         expect(res.body).to.have.property('message');
         expect(res.body).to.be.an('object');

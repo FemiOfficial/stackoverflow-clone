@@ -20,11 +20,11 @@ var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _Response = require('../Helpers/Response');
+var _Response = require('../helpers/Response');
 
 var _Response2 = _interopRequireDefault(_Response);
 
-var _statusCodes = require('../Helpers/statusCodes');
+var _statusCodes = require('../helpers/statusCodes');
 
 var _statusCodes2 = _interopRequireDefault(_statusCodes);
 
