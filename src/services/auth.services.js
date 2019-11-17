@@ -1,5 +1,5 @@
 import UserModel from '../db/models/users.model';
-import utils from '../Helpers/utils';
+import utils from '../helpers/utils';
 
 class AuthServices {
   async registerUser(data) {
@@ -26,6 +26,17 @@ class AuthServices {
     return new Promise((resolve, reject) => {
       UserModel.findOne({ username })
         .select('-_id email username githubUsername password')
+        .exec((err, user) => {
+          if (err) reject(err);
+          resolve(user);
+        });
+    });
+  }
+
+  getUserByUsernameAndReturnWithId(username) {
+    return new Promise((resolve, reject) => {
+      UserModel.findOne({ username })
+        .select('_id email username githubUsername')
         .exec((err, user) => {
           if (err) reject(err);
           resolve(user);

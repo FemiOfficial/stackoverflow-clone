@@ -15,9 +15,18 @@ var QuestionSchema = new _mongoose2.default.Schema({
   title: String,
   tags: String,
   body: String,
-  answered: Boolean,
-  answer_count: Number,
-  view_count: Number
+  answered: {
+    type: Boolean,
+    default: false
+  },
+  answer_count: {
+    type: Number,
+    default: 0
+  },
+  view_count: {
+    type: Number,
+    default: 0
+  }
 }, { timestamps: true });
 
 var QuestionsModel = _mongoose2.default.model('Questions', QuestionSchema);

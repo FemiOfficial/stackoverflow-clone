@@ -1,6 +1,6 @@
-import Response from '../Helpers/Response';
-import codes from '../Helpers/statusCodes';
-import utils from '../Helpers/utils';
+import Response from '../helpers/Response';
+import codes from '../helpers/statusCodes';
+import utils from '../helpers/utils';
 import { registerUser, checkUserByUsername, checkUserByEmail } from '../services/auth.services';
 
 class AuthControllers {

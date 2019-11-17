@@ -24,7 +24,7 @@ var _users = require('../db/models/users.model');
 
 var _users2 = _interopRequireDefault(_users);
 
-var _utils = require('../Helpers/utils');
+var _utils = require('../helpers/utils');
 
 var _utils2 = _interopRequireDefault(_utils);
 
@@ -80,6 +80,16 @@ var AuthServices = function () {
     value: function checkUserByUsername(username) {
       return new _promise2.default(function (resolve, reject) {
         _users2.default.findOne({ username: username }).select('-_id email username githubUsername password').exec(function (err, user) {
+          if (err) reject(err);
+          resolve(user);
+        });
+      });
+    }
+  }, {
+    key: 'getUserByUsernameAndReturnWithId',
+    value: function getUserByUsernameAndReturnWithId(username) {
+      return new _promise2.default(function (resolve, reject) {
+        _users2.default.findOne({ username: username }).select('_id email username githubUsername').exec(function (err, user) {
           if (err) reject(err);
           resolve(user);
         });

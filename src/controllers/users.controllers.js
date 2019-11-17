@@ -1,5 +1,5 @@
-import Response from '../Helpers/Response';
-import codes from '../Helpers/statusCodes';
+import Response from '../helpers/Response';
+import codes from '../helpers/statusCodes';
 import { deleteUserByUsername } from '../services/user.services';
 
 class UsersControllers {

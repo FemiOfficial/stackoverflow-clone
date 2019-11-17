@@ -19,6 +19,10 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Utils = {
+  verifyToken: function verifyToken(token) {
+    var authToken = _jsonwebtoken2.default.verify(token, process.env.API_SECRET_KEY);
+    return authToken;
+  },
   hashpassword: function hashpassword(pwd) {
     var salt = _bcrypt2.default.genSaltSync(15);
     var password = _bcrypt2.default.hashSync(pwd, salt);
