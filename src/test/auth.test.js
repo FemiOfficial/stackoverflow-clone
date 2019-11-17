@@ -65,7 +65,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signup')
         .send(testcases.validReg)
         .end((err, res) => {
-
           expect(res.status).to.eqls(201);
           expect(res.body).to.have.property('token');
           expect(res.body).to.have.property('data');
@@ -79,7 +78,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signup')
         .send(testcases.reg409)
         .end((err, res) => {
-
           expect(res.status).to.eqls(409);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -93,7 +91,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signup')
         .send(testcases.reg409_2)
         .end((err, res) => {
-
           expect(res.status).to.eqls(409);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -107,7 +104,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signup')
         .send(testcases.reg400_1)
         .end((err, res) => {
-
           expect(res.status).to.eqls(400);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -122,7 +118,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signup')
         .send(testcases.invalidEmail)
         .end((err, res) => {
-
           expect(res.status).to.eqls(400);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -137,7 +132,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signup')
         .send(testcases.invalidPassword)
         .end((err, res) => {
-
           expect(res.status).to.eqls(400);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -153,7 +147,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signin')
         .send(testcases.validSignIn)
         .end((err, res) => {
-
           expect(res.status).to.eqls(200);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -170,7 +163,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signin')
         .send(testcases.invalidSignIn)
         .end((err, res) => {
-
           expect(res.status).to.eqls(400);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -186,7 +178,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signin')
         .send(testcases.invalidUsername)
         .end((err, res) => {
-
           expect(res.status).to.eqls(400);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
@@ -202,7 +193,6 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
         .post('/v1/auth/signin')
         .send({})
         .end((err, res) => {
-
           expect(res.status).to.eqls(400);
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
