@@ -12,4 +12,16 @@ questionRouter.post('/ask',
   validateAskPayload,
   questioncontrollers.handleAskQuestion);
 
+questionRouter.get('/',
+  validateAccessToken,
+  questioncontrollers.viewAllQuestions);
+
+questionRouter.get('/bytag/:tag',
+  validateAccessToken,
+  questioncontrollers.viewQuestionsWithATag);
+
+questionRouter.get('/byid/:id',
+  validateAccessToken,
+  questioncontrollers.viewQuestionById);
+
 export default questionRouter;
