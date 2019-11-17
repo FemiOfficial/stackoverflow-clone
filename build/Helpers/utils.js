@@ -19,7 +19,9 @@ var _moment2 = _interopRequireDefault(_moment);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Utils = {
-  verifyToken: function verifyToken(token) {
+  getUserFromToken: function getUserFromToken(request) {
+    var token = request.body.token || request.query.token || request.headers['x-access-token'] || request.headers.Authorization || request.headers.authorization;
+
     var authToken = _jsonwebtoken2.default.verify(token, process.env.API_SECRET_KEY);
     return authToken;
   },
@@ -33,7 +35,6 @@ var Utils = {
     return isValid;
   },
   generateAccessToken: function generateAccessToken(data, key) {
-
     var payload = {
       username: data.username,
       githubUsername: data.githubUsername,

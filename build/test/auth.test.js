@@ -73,7 +73,7 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
       email: 'test33@gmail.com'
     }
   };
-  describe('POST /v1/auth/signup', function () {
+  describe('POST /v1/auth/signup && /v1/auth/signin', function () {
     it('create a new user', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.validReg).end(function (err, res) {
         expect(res.status).to.eqls(201);

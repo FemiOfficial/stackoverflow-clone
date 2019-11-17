@@ -35,17 +35,6 @@ var Response = function () {
     key: 'success',
     value: function success(res, status, data, message, purpose) {
       switch (purpose) {
-        case 'verifynumber':
-          return res.status(status).json({
-            status: status,
-            message: message,
-            userCode: data
-          });
-        case 'completeresetpassword':
-          return res.status(status).json({
-            status: status,
-            message: message
-          });
         case 'nodata':
           return res.status(status).json({
             status: status,

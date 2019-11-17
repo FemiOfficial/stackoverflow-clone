@@ -3,7 +3,6 @@ import codes from '../helpers/statusCodes';
 import { handleValidationError, handleError } from '../helpers/Response';
 
 class QuestionValidators {
-
   validateAskPayload(request, response, next) {
     try {
       const { body } = request;
@@ -39,7 +38,6 @@ class QuestionValidators {
       return handleError(response, codes.serverError, error);
     }
   }
-
 }
 
 module.exports = new QuestionValidators();

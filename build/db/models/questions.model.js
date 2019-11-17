@@ -13,7 +13,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var QuestionSchema = new _mongoose2.default.Schema({
   user: Object,
   title: String,
-  tags: String,
+  tags: Array,
   body: String,
   answered: {
     type: Boolean,

@@ -4,7 +4,6 @@ import { handleValidationError, handleError } from '../helpers/Response';
 import codes from '../helpers/statusCodes';
 
 class AuthVlidations {
-
   validateAccessToken(request, response, next) {
     const authToken = request.body.token || request.query.token
       || request.headers['x-access-token']
@@ -28,7 +27,6 @@ class AuthVlidations {
       }
 
       next();
-
     } catch (error) {
       return handleError(response, codes.serverError, error);
     }

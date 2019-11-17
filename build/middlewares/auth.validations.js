@@ -8,6 +8,10 @@ var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 var _validator = require('validator');
 
 var _Response = require('../helpers/Response');
@@ -24,6 +28,31 @@ var AuthVlidations = function () {
   }
 
   (0, _createClass3.default)(AuthVlidations, [{
+    key: 'validateAccessToken',
+    value: function validateAccessToken(request, response, next) {
+      var authToken = request.body.token || request.query.token || request.headers['x-access-token'] || request.headers.Authorization || request.headers.authorization;
+
+      if (!authToken) {
+        return (0, _Response.handleError)(response, _statusCodes2.default.badRequest, 'token must be provided');
+      }
+      try {
+        var decoded = _jsonwebtoken2.default.decode(request.headers.authorization);
+
+        if (Date.now() >= decoded.exp * 1000) {
+          return (0, _Response.handleError)(response, _statusCodes2.default.unAuthorized, 'token expired!');
+        }
+        var verified = _jsonwebtoken2.default.verify(request.headers.authorization, process.env.API_SECRET_KEY);
+
+        if (!verified) {
+          return (0, _Response.handleError)(response, _statusCodes2.default.badRequest, 'invalid token provided');
+        }
+
+        next();
+      } catch (error) {
+        return (0, _Response.handleError)(response, _statusCodes2.default.serverError, error);
+      }
+    }
+  }, {
     key: 'validateLoginPayload',
     value: function validateLoginPayload(request, response, next) {
       try {
