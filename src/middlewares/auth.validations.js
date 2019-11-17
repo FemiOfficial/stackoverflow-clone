@@ -1,4 +1,4 @@
-import { isEmpty, isEmail } from 'validator';
+import { isEmpty, isEmail, isAlphanumeric } from 'validator';
 import { handleValidationError } from '../Helpers/Response';
 import codes from '../Helpers/statusCodes';
 
@@ -30,12 +30,12 @@ class AuthVlidations {
       const { body } = request;
       const errors = [];
 
-      if (body.username === null || !body.username || isEmpty(body.username)) {
-        errors.push('username is required');
+      if (body.username === null || !body.username || isEmpty(body.username) || body.username.length < 6) {
+        errors.push('username is required (at least 6 characters)');
       }
 
-      if (body.password === null || !body.password || isEmpty(body.password)) {
-        errors.push('password is required');
+      if (body.password === null || !body.password || isEmpty(body.password) || !isAlphanumeric(body.password) || body.password.length < 8) {
+        errors.push('password is required (alphanumeric and not less than 8 characters)');
       }
 
       if (body.githubUsername === null || !body.githubUsername || isEmpty(body.githubUsername)) {

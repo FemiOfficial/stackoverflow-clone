@@ -4,7 +4,7 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run build && nyc mocha ./build/test/*.js --timeout 30000000  --exit",
     "clean": "rm -rf build && mkdir build",
     "build": "npm run clean && babel ./src -d build --copy-files",
     "dev": "nodemon ./src/app.js --exec babel-node ",
@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
+    "babel-cli": "^6.26.0",
     "@babel/node": "^7.7.0",
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/preset-env": "^7.7.1",

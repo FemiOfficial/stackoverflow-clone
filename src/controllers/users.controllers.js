@@ -3,7 +3,6 @@ import codes from '../Helpers/statusCodes';
 import { deleteUserByUsername } from '../services/user.services';
 
 class UsersControllers {
-
   async deleteUser(request, response) {
     try {
       await deleteUserByUsername(request.params.username)

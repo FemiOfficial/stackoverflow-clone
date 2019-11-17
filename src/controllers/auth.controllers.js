@@ -10,14 +10,14 @@ class AuthControllers {
       const checkbyusername = await checkUserByUsername(body.username);
       const checkbyemail = await checkUserByEmail(body.email);
       if (checkbyusername !== null) {
-        return Response.handleError(response, codes.badRequest, 'username already taken');
+        return Response.handleError(response, codes.conflict, 'username already taken');
       }
       if (checkbyemail !== null) {
-        return Response.handleError(response, codes.badRequest, 'email already taken');
+        return Response.handleError(response, codes.conflict, 'email already taken');
       }
       const data = await registerUser(body);
 
-      return Response.authSuccess(response, codes.success, data.accessToken, data.newuser, 'user registered sucessfully');
+      return Response.authSuccess(response, codes.created, data.accessToken, data.newuser, 'user registered sucessfully');
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);
     }
