@@ -2,7 +2,6 @@ import QuestionModel from '../db/models/questions.model';
 import { getUserByUsernameAndReturnWithId } from './auth.services';
 
 class QuestionServices {
-
   async saveQuestion(username, question) {
     const user = await getUserByUsernameAndReturnWithId(username);
 
@@ -27,7 +26,7 @@ class QuestionServices {
 
   getAllQuestions() {
     return new Promise((resolve, reject) => {
-      QuestionModel.find({}, '-_id user title body view_count answer_count answered tags ', (err, doc) => {
+      QuestionModel.find({}, '_id user title body view_count answer_count answered tags ', (err, doc) => {
         if (err) reject(err);
         resolve(doc);
       });
@@ -46,8 +45,67 @@ class QuestionServices {
 
   getQuestionById(id) {
     return new Promise((resolve, reject) => {
-      QuestionModel.findById(id, '_id user title body view_count answer_count answered tags ', (err, doc) => {
+      QuestionModel.findById(id, '_id user title body view_count vote_count answer_count answered tags ', (err, doc) => {
         if (err) reject(err);
+        resolve(doc);
+      });
+    });
+  }
+
+  viewQuestionById(id) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findById(id, '_id user title body view_count vote_count answer_count answered tags ', (err, doc) => {
+        if (err) reject(err);
+        doc.view_count += 1;
+        doc.save();
+        resolve(doc);
+      });
+    });
+  }
+
+  updateAnswerCount(id) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findById(id, (err, doc) => {
+        if (err) reject(err);
+        doc.answer_count += 1;
+        doc.save();
+        resolve(doc);
+      });
+    });
+  }
+
+  upVoteQuestion(id) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findById(id, (err, doc) => {
+        if (err) reject(err);
+        doc.vote_count += 1;
+        doc.save();
+        resolve(doc);
+      });
+    });
+  }
+
+  downVoteQuestion(id) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findById(id, (err, doc) => {
+        if (err) reject(err);
+        if (doc.vote_count !== 0) {
+          doc.vote_count -= 1;
+        }
+        doc.save();
+        resolve(doc);
+      });
+    });
+  }
+
+  updateAnsweredStatus(id) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findById(id, (err, doc) => {
+        if (err) reject(err);
+
+        doc.answered = true;
+
+        doc.save();
         resolve(doc);
       });
     });

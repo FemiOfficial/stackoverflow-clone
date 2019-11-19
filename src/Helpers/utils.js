@@ -29,7 +29,7 @@ const Utils = {
       username: data.username,
       githubUsername: data.githubUsername,
       email: data.email,
-      generatedTime: moment().toDate(),
+      id: data._id,
     };
 
     const authToken = jwt.sign(

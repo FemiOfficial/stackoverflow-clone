@@ -38,7 +38,7 @@ app.use('/v1', indexv1Route);
 
 process.env.TZ = 'Africa/Lagos';
 
-process.env.PORT = 3000;
+process.env.PORT = 4500;
 
 const server = app.listen(process.env.PORT, () => {
   Logger.log(`app is running from port ${server.address().port}`);
