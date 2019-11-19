@@ -25,7 +25,7 @@ class AuthServices {
   checkUserByUsername(username) {
     return new Promise((resolve, reject) => {
       UserModel.findOne({ username })
-        .select('-_id email username githubUsername password')
+        .select('_id email username githubUsername password')
         .exec((err, user) => {
           if (err) reject(err);
           resolve(user);

@@ -23,6 +23,10 @@ var QuestionSchema = new _mongoose2.default.Schema({
     type: Number,
     default: 0
   },
+  vote_count: {
+    type: Number,
+    default: 0
+  },
   view_count: {
     type: Number,
     default: 0

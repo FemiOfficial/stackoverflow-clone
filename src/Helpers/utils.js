@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import moment from 'moment';
 
 const Utils = {
 
@@ -29,7 +28,7 @@ const Utils = {
       username: data.username,
       githubUsername: data.githubUsername,
       email: data.email,
-      generatedTime: moment().toDate(),
+      id: data._id,
     };
 
     const authToken = jwt.sign(
@@ -37,7 +36,7 @@ const Utils = {
       { expiresIn: '24h' },
     );
     return authToken;
-  }
-}
+  },
+};
 
 export default Utils;

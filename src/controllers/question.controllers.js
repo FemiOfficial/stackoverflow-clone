@@ -1,4 +1,9 @@
-import { saveQuestion, getAllQuestions,  getQuestionsByTag, getQuestionById } from '../services/question.services';
+import {
+  saveQuestion, getAllQuestions, getQuestionsByTag,
+  viewQuestionById, upVoteQuestion, downVoteQuestion,
+  getQuestionById,
+} from '../services/question.services';
+
 import Response from '../helpers/Response';
 import codes from '../helpers/statusCodes';
 import utils from '../helpers/utils';
@@ -15,6 +20,7 @@ class QuestionController {
             title: doc.title,
             tags: doc.tags,
             body: doc.body,
+            id: doc._id,
           };
           return Response.success(response, codes.success, data, 'Question uploaded successfully');
         })
@@ -57,14 +63,34 @@ class QuestionController {
   viewQuestionById(request, response) {
     try {
       const { id } = request.params;
-
-      getQuestionById(id)
+      viewQuestionById(id)
         .then((data) => {
           if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, `No question with id: ${id}`);
-
           return Response.success(response, codes.success, data, `Question with id: ${id}`);
         })
         .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async voteQuestion(request, response) {
+    try {
+      const { questionid, action } = request.params;
+      if (getQuestionById(questionid) === null || getQuestionById(questionid) === []) {
+        return Response.handleError(response, codes.notFound, 'invalid answer id (not found)');
+      }
+      if (action === 'up') {
+        upVoteQuestion(questionid)
+          .then((data) => Response.success(response, codes.success, data, `Answer with id: ${answerid}, voted up successfully`))
+          .catch((err) => Response.handleError(response, codes.serverError, err));
+      } else if (action === 'down') {
+        downVoteQuestion(questionid)
+          .then((data) => Response.success(response, codes.success, data, `Answer with id: ${answerid}, voted up successfully`))
+          .catch((err) => Response.handleError(response, codes.serverError, err));
+      } else {
+        return Response.handleError(response, codes.badRequest, 'invalid action parameter (up or down vote actions))');
+      }
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);
     }

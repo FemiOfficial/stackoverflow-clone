@@ -7,7 +7,6 @@ import { deleteUserByUsername } from '../services/user.services';
 chai.use(chaiHttp);
 const { expect } = chai;
 
-deleteUserByUsername('bossmen33');
 
 describe('User Authentication Endpoints [Login and Signup]', () => {
   const testcases = {
@@ -16,6 +15,12 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
       password: 'rartyt2018',
       githubUsername: 'femiofficial',
       email: 'test33@gmail.com',
+    },
+    validReg2: {
+      username: 'maintest',
+      password: 'rartyt2018',
+      githubUsername: 'femiofficial',
+      email: 'maintest@email.com',
     },
     validSignIn: {
       username: 'bossmen33',
@@ -59,11 +64,30 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
       email: 'test33@gmail.com',
     },
   };
+
+  deleteUserByUsername('bossmen33');
+
+  deleteUserByUsername('maintest');
+
+
   describe('POST /v1/auth/signup && /v1/auth/signin', () => {
     it('create a new user', (done) => {
       chai.request(app)
         .post('/v1/auth/signup')
         .send(testcases.validReg)
+        .end((err, res) => {
+          expect(res.status).to.eqls(201);
+          expect(res.body).to.have.property('token');
+          expect(res.body).to.have.property('data');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(201);
+          done();
+        });
+    });
+    it('create another new user', (done) => {
+      chai.request(app)
+        .post('/v1/auth/signup')
+        .send(testcases.validReg2)
         .end((err, res) => {
           expect(res.status).to.eqls(201);
           expect(res.body).to.have.property('token');
