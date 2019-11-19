@@ -21,8 +21,6 @@ _chai2.default.use(_chaiHttp2.default);
 var expect = _chai2.default.expect;
 
 
-(0, _user.deleteUserByUsername)('bossmen33');
-
 describe('User Authentication Endpoints [Login and Signup]', function () {
   var testcases = {
     validReg: {
@@ -30,6 +28,12 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
       password: 'rartyt2018',
       githubUsername: 'femiofficial',
       email: 'test33@gmail.com'
+    },
+    validReg2: {
+      username: 'maintest',
+      password: 'rartyt2018',
+      githubUsername: 'femiofficial',
+      email: 'maintest@email.com'
     },
     validSignIn: {
       username: 'bossmen33',
@@ -73,9 +77,24 @@ describe('User Authentication Endpoints [Login and Signup]', function () {
       email: 'test33@gmail.com'
     }
   };
+
+  (0, _user.deleteUserByUsername)('bossmen33');
+
+  (0, _user.deleteUserByUsername)('maintest');
+
   describe('POST /v1/auth/signup && /v1/auth/signin', function () {
     it('create a new user', function (done) {
       _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.validReg).end(function (err, res) {
+        expect(res.status).to.eqls(201);
+        expect(res.body).to.have.property('token');
+        expect(res.body).to.have.property('data');
+        expect(res.body).to.be.an('object');
+        expect(res.body.status).to.eqls(201);
+        done();
+      });
+    });
+    it('create another new user', function (done) {
+      _chai2.default.request(_app2.default).post('/v1/auth/signup').send(testcases.validReg2).end(function (err, res) {
         expect(res.status).to.eqls(201);
         expect(res.body).to.have.property('token');
         expect(res.body).to.have.property('data');

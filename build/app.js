@@ -72,7 +72,7 @@ app.use('/v1', _index2.default);
 
 process.env.TZ = 'Africa/Lagos';
 
-process.env.PORT = 3000;
+process.env.PORT = 4500;
 
 var server = app.listen(process.env.PORT, function () {
   _Logger2.default.log('app is running from port ' + server.address().port);

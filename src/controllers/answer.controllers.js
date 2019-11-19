@@ -1,4 +1,7 @@
-import { saveAnswer, getAnswerById, acceptAnswer, upVoteAnswer, downVoteAnswer } from '../services/answers.services';
+import {
+  saveAnswer, getAnswerById, acceptAnswer,
+  upVoteAnswer, downVoteAnswer,
+} from '../services/answers.services';
 import { getQuestionById, updateAnswerCount } from '../services/question.services';
 import Response from '../helpers/Response';
 import codes from '../helpers/statusCodes';
@@ -22,9 +25,7 @@ class AnswerControllers {
 
           return Response.success(response, codes.success, data, 'Answer posted successfully');
         })
-        .catch((err) => {
-          return Response.handleError(response, codes.serverError, err);
-        });
+        .catch((err) => Response.handleError(response, codes.serverError, err));
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);
     }
@@ -44,8 +45,12 @@ class AnswerControllers {
         return Response.handleError(response, codes.notFound, 'invalid answer id (not found)');
       }
 
+      if (answer.accepted === true) {
+        return Response.handleError(response, codes.conflict, 'answer has already been accepted');
+      }
+
       acceptAnswer(answerid)
-        .then((data) => Response.success(response, codes.success, data))
+        .then((data) => Response.success(response, codes.success, data, 'answer accepted successfully'))
         .catch((err) => Response.handleError(response, codes.serverError, err));
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);

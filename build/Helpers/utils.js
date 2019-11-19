@@ -12,10 +12,6 @@ var _jsonwebtoken = require('jsonwebtoken');
 
 var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
 
-var _moment = require('moment');
-
-var _moment2 = _interopRequireDefault(_moment);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Utils = {
@@ -39,7 +35,7 @@ var Utils = {
       username: data.username,
       githubUsername: data.githubUsername,
       email: data.email,
-      generatedTime: (0, _moment2.default)().toDate()
+      id: data._id
     };
 
     var authToken = _jsonwebtoken2.default.sign(payload, key, { expiresIn: '24h' });

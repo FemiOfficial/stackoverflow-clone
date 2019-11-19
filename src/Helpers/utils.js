@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import moment from 'moment';
 
 const Utils = {
 
@@ -37,7 +36,7 @@ const Utils = {
       { expiresIn: '24h' },
     );
     return authToken;
-  }
-}
+  },
+};
 
 export default Utils;

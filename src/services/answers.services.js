@@ -71,6 +71,15 @@ class AnswerServices {
       });
     });
   }
+
+  deleteAnswerByBody(body) {
+    return new Promise((resolve, reject) => {
+      AnswerModel.deleteMany({ body }, (error, response) => {
+        if (error) reject(error);
+        resolve(response);
+      });
+    });
+  }
 }
 
 module.exports = new AnswerServices();

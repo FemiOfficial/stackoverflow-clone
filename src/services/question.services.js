@@ -56,9 +56,13 @@ class QuestionServices {
     return new Promise((resolve, reject) => {
       QuestionModel.findById(id, '_id user title body view_count vote_count answer_count answered tags ', (err, doc) => {
         if (err) reject(err);
-        doc.view_count += 1;
-        doc.save();
-        resolve(doc);
+        if (doc === null || doc === undefined) {
+          resolve(doc);
+        } else {
+          doc.view_count += 1;
+          doc.save();
+          resolve(doc);
+        }
       });
     });
   }
@@ -67,8 +71,10 @@ class QuestionServices {
     return new Promise((resolve, reject) => {
       QuestionModel.findById(id, (err, doc) => {
         if (err) reject(err);
-        doc.answer_count += 1;
-        doc.save();
+        if (doc !== null || doc !== []) {
+          doc.answer_count += 1;
+          doc.save();
+        }
         resolve(doc);
       });
     });

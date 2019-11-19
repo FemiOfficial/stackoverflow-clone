@@ -14,8 +14,14 @@ var AnswerSchema = new _mongoose2.default.Schema({
   question: Object,
   user: Object,
   body: String,
-  accepted: Boolean,
-  vote_count: Number
+  accepted: {
+    type: Boolean,
+    default: false
+  },
+  vote_count: {
+    type: Number,
+    default: 0
+  }
 }, { timestamps: true });
 
 var AnswersModel = _mongoose2.default.model('Answers', AnswerSchema);

@@ -79,7 +79,7 @@ var AuthServices = function () {
     key: 'checkUserByUsername',
     value: function checkUserByUsername(username) {
       return new _promise2.default(function (resolve, reject) {
-        _users2.default.findOne({ username: username }).select('-_id email username githubUsername password').exec(function (err, user) {
+        _users2.default.findOne({ username: username }).select('_id email username githubUsername password').exec(function (err, user) {
           if (err) reject(err);
           resolve(user);
         });

@@ -20,6 +20,7 @@ class QuestionController {
             title: doc.title,
             tags: doc.tags,
             body: doc.body,
+            id: doc._id,
           };
           return Response.success(response, codes.success, data, 'Question uploaded successfully');
         })
