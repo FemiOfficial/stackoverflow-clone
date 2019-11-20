@@ -4,7 +4,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
-import { getQuestionById, deleteQuestionByTAG } from '../services/question.services';
+import { deleteQuestionByTAG } from '../services/question.services';
 import { deleteAnswerByBody } from '../services/answers.services';
 
 chai.use(chaiHttp);
@@ -423,5 +423,4 @@ describe('Answers Endpoints', () => {
         });
     });
   });
-
 });
