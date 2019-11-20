@@ -77,16 +77,17 @@ class QuestionController {
   async voteQuestion(request, response) {
     try {
       const { questionid, action } = request.params;
-      if (getQuestionById(questionid) === null || getQuestionById(questionid) === []) {
-        return Response.handleError(response, codes.notFound, 'invalid answer id (not found)');
+      const question = await getQuestionById(questionid);
+      if (question === null || question === []) {
+        return Response.handleError(response, codes.notFound, 'invalid question id (not found)');
       }
       if (action === 'up') {
         upVoteQuestion(questionid)
-          .then((data) => Response.success(response, codes.success, data, `Answer with id: ${answerid}, voted up successfully`))
+          .then((data) => Response.success(response, codes.success, data, `Question with id: ${questionid}, voted up successfully`))
           .catch((err) => Response.handleError(response, codes.serverError, err));
       } else if (action === 'down') {
         downVoteQuestion(questionid)
-          .then((data) => Response.success(response, codes.success, data, `Answer with id: ${answerid}, voted up successfully`))
+          .then((data) => Response.success(response, codes.success, data, `Question with id: ${questionid}, voted down successfully`))
           .catch((err) => Response.handleError(response, codes.serverError, err));
       } else {
         return Response.handleError(response, codes.badRequest, 'invalid action parameter (up or down vote actions))');
