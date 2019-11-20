@@ -292,4 +292,79 @@ describe('Questions Endpoints [POST(ask) and GET(view)]', () => {
         });
     });
   });
+
+  describe('PATCH /v1/questions/vote/:questionid/:action', () => {
+    it('should throw error for invalid request parameter', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/vote/${testquestion._id}/random`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.message).to.eqls('invalid action parameter (up or down vote actions))');
+          expect(res.body.status).to.eqls(400);
+          done();
+        });
+    });
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/vote/${testquestion._id}/up`)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should upvote an question successfully', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/vote/${testquestion._id}/up`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should downvote an question successfully', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/vote/${testquestion._id}/down`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should throw an error for invalid questionid', (done) => {
+      chai.request(app)
+        .patch('/v1/questions/vote/5653t3t3522g/up')
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(404);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(404);
+
+          done();
+        });
+    });
+  });
 });
