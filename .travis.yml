@@ -16,7 +16,5 @@ env:
     - MDB_USRNAME-heroku_mgoadmin
     - MDB_PASSWORD-2019!!Heroku
 
-before_script:
-      - mongo admin --eval 'db.createUser({user: 'travis_mgoadmin', pwd: '2019!!Test', roles: [{ role:'userAdminAnyDatabase', db: 'admin'}, {role:'readWriteAnyDatabase',db: 'admin'}]});'
 script:
       - npm run test
