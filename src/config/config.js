@@ -20,8 +20,19 @@ const config = {
     DATABASE_URL: `mongodb://localhost:${process.env.MDB_PORT}${process.env.DATABASE_URL}`,
     SECRET_KEY: process.env.API_SECRET_KEY,
     options: {
-      user: process.env.MDB_USRNAME,
-      pass: process.env.MDB_PASSWORD,
+      user: process.env.MDB_LIVE_USRNAME,
+      pass: process.env.MDB_LIVE_PASSWORD,
+      keepAlive: true,
+      keepAliveInitialDelay: 300000,
+      useNewUrlParser: true,
+    },
+  },
+  test: {
+    DATABASE_URL: `mongodb://localhost:${process.env.MDB_PORT}${process.env.DATABASE_URL}`,
+    SECRET_KEY: process.env.API_SECRET_KEY,
+    options: {
+      user: process.env.MDB_TEST_USRNAME,
+      pass: process.env.MDB__TEST_PASSWORD,
       keepAlive: true,
       keepAliveInitialDelay: 300000,
       useNewUrlParser: true,
