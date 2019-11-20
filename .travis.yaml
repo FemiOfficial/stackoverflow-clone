@@ -5,7 +5,6 @@ cache:
   directories:
     - "node_modules"
 
-before_install: cd apis/
 install:
       - npm install
 services: 
@@ -13,13 +12,11 @@ services:
 env: 
   global:
     - NODE_ENV=test
-    - SECRET_KEY=themealappkey
-    - CODECLIMATE_REPO_TOKEN=dd8ff66cb3c35a9f1a51cf5131b20d2ed38ca05dbc4ca0b0604cc70468c4be65
+    - API_SECRET_KEY=df07d49effd0843be8c7ebc4c4dff677261755c118a3d62fef0d2e92ebdc9941
+    - MDB_USRNAME-heroku_mgoadmin
+    - MDB_PASSWORD-2019!!Heroku
+
 before_script:
-      - psql -c 'create database travis;' -U postgres
-      - psql -c "CREATE USER root WITH PASSWORD null;" -U postgres
-      - npm install -g sequelize-cli 
+      - mongo admin --eval 'db.createUser({user: 'travis_mgoadmin', pwd: '2019!!Test', roles: [{ role:'userAdminAnyDatabase', db: 'admin'}, {role:'readWriteAnyDatabase',db: 'admin'}]});'
 script:
       - npm run test
-after_success:
-      - npm run coverage
