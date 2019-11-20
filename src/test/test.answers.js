@@ -4,7 +4,7 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
-import { getQuestionById, deleteQuestionByTAG } from '../services/question.services';
+import { deleteQuestionByTAG } from '../services/question.services';
 import { deleteAnswerByBody } from '../services/answers.services';
 
 chai.use(chaiHttp);
@@ -197,7 +197,7 @@ describe('Answers Endpoints', () => {
     });
   });
 
-  describe('PATCH /vote/:answerid/:action', () => {
+  describe('PATCH /v1/vote/:answerid/:action', () => {
     it('should throw error for invalid request parameter', (done) => {
       chai.request(app)
         .patch(`/v1/answers/vote/${testanswer._id}/random`)
@@ -268,6 +268,156 @@ describe('Answers Endpoints', () => {
           expect(res.body).to.be.an('object');
 
           expect(res.body.status).to.eqls(500);
+
+          done();
+        });
+    });
+  });
+
+  describe('GET /v1/answers/:answerid', () => {
+    it('should throw error for invalid request parameter', (done) => {
+      chai.request(app)
+        .get('/v1/answers/67464638363637')
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(500);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(500);
+
+          done();
+        });
+    });
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .get('/v1/answers/67464638363637')
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should get answer by id successfully', (done) => {
+      chai.request(app)
+        .get(`/v1/answers/${testanswer._id}`)
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.have.property('data');
+
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+  });
+
+  describe('GET /v1/answers/byquestion/all/:questionid', () => {
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .get('/v1/answers/byquestion/all/67464638363637')
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should throw error for no answer found', (done) => {
+      chai.request(app)
+        .get(`/v1/answers/byquestion/all/${testanswer._id}`)
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(404);
+          expect(res.body).to.have.property('message');
+
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(404);
+
+          done();
+        });
+    });
+
+    it('should get answers by questionid successfully', (done) => {
+      chai.request(app)
+        .get(`/v1/answers/byquestion/all/${testquestion.id}`)
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.have.property('data');
+
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+  });
+
+  describe('GET /v1/answers/byquestion/accepted/:questionid', () => {
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .get('/v1/answers/byquestion/accepted/67464638363637')
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should throw error for no answer found', (done) => {
+      chai.request(app)
+        .get(`/v1/answers/byquestion/accepted/${testanswer._id}`)
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(404);
+          expect(res.body).to.have.property('message');
+
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(404);
+
+          done();
+        });
+    });
+
+    it('should get answers by questionid successfully', (done) => {
+      chai.request(app)
+        .get(`/v1/answers/byquestion/accepted/${testquestion.id}`)
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.have.property('data');
+
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
 
           done();
         });

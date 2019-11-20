@@ -6,6 +6,18 @@ import answerControllers from '../controllers/answer.controllers';
 
 const answerRouter = express.Router();
 
+answerRouter.get('/:answerid',
+  validateAccessToken,
+  answerControllers.viewAnswerById);
+
+answerRouter.get('/byquestion/all/:questionid',
+  validateAccessToken,
+  answerControllers.viewAnswersByQuestionId);
+
+answerRouter.get('/byquestion/accepted/:questionid',
+  validateAccessToken,
+  answerControllers.viewAnswersByQuestionIdAccepted);
+
 answerRouter.post('/post/:questionid',
   trimInputs,
   validateAccessToken,
