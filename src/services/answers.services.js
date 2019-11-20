@@ -48,6 +48,41 @@ class AnswerServices {
     });
   }
 
+  viewAnswerById(id) {
+    return new Promise((resolve, reject) => {
+      AnswerModel.findById(id, '-_id question user body accepted vote_count', (err, doc) => {
+        if (err) reject(err);
+        resolve(doc);
+      });
+    });
+  }
+
+  viewAnswersByQuestionIdAnswered(questionid) {
+    return new Promise((resolve, reject) => {
+      AnswerModel.find(
+        // { 'question._id': questionid },
+        { 'question.answered': true },
+        '-_id question user body accepted vote_count', (err, doc) => {
+          if (err) reject(err);
+
+          const answers = doc.filter((i) => i.question._id == questionid);
+          resolve(answers);
+        });
+    });
+  }
+
+  viewAnswersByQuestionIdAccepted(questionid) {
+    return new Promise((resolve, reject) => {
+      AnswerModel.find({ accepted: true }, '-_id question user body accepted vote_count', (err, doc) => {
+        if (err) reject(err);
+
+        const answers = doc.filter((i) => i.question._id == questionid);
+
+        resolve(answers);
+      });
+    });
+  }
+
   upVoteAnswer(id) {
     return new Promise((resolve, reject) => {
       AnswerModel.findById(id, (err, doc) => {

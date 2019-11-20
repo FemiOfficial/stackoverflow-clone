@@ -1,6 +1,7 @@
 import {
   saveAnswer, getAnswerById, acceptAnswer,
-  upVoteAnswer, downVoteAnswer,
+  upVoteAnswer, downVoteAnswer, viewAnswerById,
+  viewAnswersByQuestionIdAnswered, viewAnswersByQuestionIdAccepted,
 } from '../services/answers.services';
 import { getQuestionById, updateAnswerCount } from '../services/question.services';
 import Response from '../helpers/Response';
@@ -82,6 +83,57 @@ class AnswerControllers {
       return Response.handleError(response, codes.serverError, error);
     }
   }
-}
 
+  viewAnswerById(request, response) {
+    try {
+      const { answerid } = request.params;
+      viewAnswerById(answerid)
+        .then((data) => {
+          if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, `No question with id: ${answerid}`);
+          return Response.success(response, codes.success, data, `Answer with id: ${answerid}`);
+        })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  viewAnswersByQuestionId(request, response) {
+    try {
+      const { questionid } = request.params;
+      const question = getQuestionById(questionid);
+
+      if (question === null || question === []) {
+        return Response.handleError(response, codes.notFound, 'invalid question id (not found)');
+      }
+
+      viewAnswersByQuestionIdAnswered(questionid)
+        .then((data) => {
+          if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, `Question with id: ${questionid} has not been answered`);
+          return Response.success(response, codes.success, data, `Answers for question with id: ${questionid}`);
+        })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  viewAnswersByQuestionIdAccepted(request, response) {
+    try {
+      const { questionid } = request.params;
+      const question = getQuestionById(questionid);
+      if (question === null || question === []) {
+        return Response.handleError(response, codes.notFound, 'invalid question id (not found)');
+      }
+      viewAnswersByQuestionIdAccepted(questionid)
+        .then((data) => {
+          if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, `Question with id: ${questionid} has no accepted answer`);
+          return Response.success(response, codes.success, data, `Accepted answers for question with id: ${questionid}`);
+        })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+}
 export default new AnswerControllers();
