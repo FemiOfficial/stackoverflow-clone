@@ -24,6 +24,18 @@ class AnswerControllers {
         .then((data) => {
           updateAnswerCount(question._id);
 
+          if (question.subscribed === true) {
+            const answernotification = {
+              question,
+              answer: {
+                body,
+                username: user.username,
+                email: user.email,
+              },
+            };
+            utils.sendanswernotification(question.user.email, 'Answer Notification', answernotification);
+          }
+
           return Response.success(response, codes.success, data, 'Answer posted successfully');
         })
         .catch((err) => Response.handleError(response, codes.serverError, err));

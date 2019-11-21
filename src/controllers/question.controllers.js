@@ -18,6 +18,7 @@ class QuestionController {
           const data = {
             user: doc.user.username,
             title: doc.title,
+            subscribed: doc.subscribed,
             tags: doc.tags,
             body: doc.body,
             id: doc._id,
@@ -35,7 +36,6 @@ class QuestionController {
       getAllQuestions()
         .then((data) => {
           if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, 'No question added');
-
           return Response.success(response, codes.success, data, 'All Questions');
         })
         .catch((err) => Response.handleError(response, codes.serverError, err));
