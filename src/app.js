@@ -19,8 +19,8 @@ mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect(config[NODE_ENV].DATABASE_URL, config[NODE_ENV].options, (err) => {
-  Logger.log(err);
-  Logger.log(`Connected to mongodb successfully on ${NODE_ENV}`);
+  if (err) Logger.log(err);
+  else { Logger.log(`Connected to mongodb successfully on ${NODE_ENV}`); }
 });
 
 /** Enable Cross Origin Resource Sharing */

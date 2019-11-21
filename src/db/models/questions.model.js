@@ -5,6 +5,10 @@ const QuestionSchema = new mongoose.Schema({
   title: String,
   tags: Array,
   body: String,
+  subscribed: {
+    type: Boolean,
+    default: true,
+  }, // Receive notification mail when question is answered
   answered: {
     type: Boolean,
     default: false,

@@ -26,7 +26,7 @@ class QuestionServices {
 
   getAllQuestions() {
     return new Promise((resolve, reject) => {
-      QuestionModel.find({}, '_id user title body view_count answer_count answered tags ', (err, doc) => {
+      QuestionModel.find({}, '_id user title body view_count answer_count subscribed answered tags ', (err, doc) => {
         if (err) reject(err);
         resolve(doc);
       });
@@ -36,7 +36,7 @@ class QuestionServices {
   // TODO: Search with regex
   getQuestionsByTag(tag) {
     return new Promise((resolve, reject) => {
-      QuestionModel.find({ tags: tag }, '_id user title body view_count answer_count answered tags ', (err, doc) => {
+      QuestionModel.find({ tags: tag }, '_id user title body view_count subscribed answer_count answered tags ', (err, doc) => {
         if (err) reject(err);
         resolve(doc);
       });
@@ -45,7 +45,7 @@ class QuestionServices {
 
   getQuestionById(id) {
     return new Promise((resolve, reject) => {
-      QuestionModel.findById(id, '_id user title body view_count vote_count answer_count answered tags ', (err, doc) => {
+      QuestionModel.findById(id, '_id user title body view_count vote_count subscribed answer_count answered tags ', (err, doc) => {
         if (err) reject(err);
         resolve(doc);
       });
@@ -54,7 +54,7 @@ class QuestionServices {
 
   viewQuestionById(id) {
     return new Promise((resolve, reject) => {
-      QuestionModel.findById(id, '_id user title body view_count vote_count answer_count answered tags ', (err, doc) => {
+      QuestionModel.findById(id, '_id user title body view_count vote_count subscribed answer_count answered tags ', (err, doc) => {
         if (err) reject(err);
         if (doc === null || doc === undefined) {
           resolve(doc);
