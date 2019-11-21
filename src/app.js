@@ -14,6 +14,8 @@ const NODE_ENV = process.env.NODE_ENV ? 'production' : 'development';
 
 const app = express();
 
+process.env.TZ = 'Africa/Lagos';
+
 /** connection mongodb */
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable no-undef */
 import chai from 'chai';
@@ -13,11 +14,16 @@ const { expect } = chai;
 
 describe('Questions Endpoints [POST(ask) and GET(view)]', () => {
   let authorization;
+  let authorization2;
   let testquestion;
 
   const testcases = {
     validSignIn: {
       username: 'bossmen33',
+      password: 'rartyt2018',
+    },
+    validSignIn2: {
+      username: 'maintest',
       password: 'rartyt2018',
     },
     validQuestion: {
@@ -41,7 +47,7 @@ describe('Questions Endpoints [POST(ask) and GET(view)]', () => {
 
   };
   describe('POST /v1/auth/signin', () => {
-    it('should log user in successfully', (done) => {
+    it('should log user1 in successfully', (done) => {
       chai.request(app)
         .post('/v1/auth/signin')
         .send(testcases.validSignIn)
@@ -53,6 +59,25 @@ describe('Questions Endpoints [POST(ask) and GET(view)]', () => {
 
           authorization = res.body.token;
 
+          expect(res.body).to.have.property('data');
+          expect(res.body.message).to.eqls('user login sucessfully');
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should log user2 in successfully', (done) => {
+      chai.request(app)
+        .post('/v1/auth/signin')
+        .send(testcases.validSignIn2)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('token');
+
+          authorization2 = res.body.token;
           expect(res.body).to.have.property('data');
           expect(res.body.message).to.eqls('user login sucessfully');
           expect(res.body.status).to.eqls(200);
@@ -362,6 +387,114 @@ describe('Questions Endpoints [POST(ask) and GET(view)]', () => {
           expect(res.body).to.have.property('message');
           expect(res.body).to.be.an('object');
           expect(res.body.status).to.eqls(404);
+
+          done();
+        });
+    });
+  });
+
+  describe('PATCH /v1/questions/:action/:questionid/', () => {
+    it('should throw error for invalid request parameter', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/notsubscribe/${testquestion._id}`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.message).to.eqls('invalid request parameter (subscribe or unsubscribe)');
+          expect(res.body.status).to.eqls(400);
+          done();
+        });
+    });
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/subscribe/${testquestion._id}`)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should throw for invalid user trying to subscribe to notification', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/unsubscribe/${testquestion._id}`)
+        .set('authorization', authorization2)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(400);
+
+          expect(res.body.message).to.eqls('invalid user, only user that ask question can request subscription');
+
+          done();
+        });
+    });
+
+    it('should unsubscribe from a question successfully', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/unsubscribe/${testquestion._id}`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should throw a conflicting data error', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/unsubscribe/${testquestion._id}`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(409);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(409);
+
+          done();
+        });
+    });
+
+    it('should subscribe to question successfully', (done) => {
+      chai.request(app)
+        .patch(`/v1/questions/subscribe/${testquestion._id}`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.have.property('data');
+
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should throw an error for invalid questionid', (done) => {
+      chai.request(app)
+        .patch('/v1/questions/unsubscribe/5653t3t3522g')
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(500);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(500);
 
           done();
         });

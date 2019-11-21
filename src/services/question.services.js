@@ -110,6 +110,7 @@ class QuestionServices {
         if (err) reject(err);
 
         doc.answered = true;
+        doc.answer_count += 1;
 
         doc.save();
         resolve(doc);
@@ -122,6 +123,28 @@ class QuestionServices {
       QuestionModel.findOneAndDelete({ tags: tag }, (error, response) => {
         if (error) reject(error);
         resolve(response);
+      });
+    });
+  }
+
+  subscribe(questionid) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findById(questionid, (error, doc) => {
+        if (error) reject(error);
+        doc.subscribed = true;
+        doc.save();
+        resolve(doc);
+      });
+    });
+  }
+
+  unsubscribe(questionid) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findById(questionid, (error, doc) => {
+        if (error) reject(error);
+        doc.subscribed = false;
+        doc.save();
+        resolve(doc);
       });
     });
   }

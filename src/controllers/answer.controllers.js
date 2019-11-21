@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import {
   saveAnswer, getAnswerById, acceptAnswer,
   upVoteAnswer, downVoteAnswer, viewAnswerById,
@@ -147,5 +148,6 @@ class AnswerControllers {
       return Response.handleError(response, codes.serverError, error);
     }
   }
+
 }
 export default new AnswerControllers();

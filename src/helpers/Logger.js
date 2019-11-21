@@ -7,7 +7,7 @@ class Logger {
       data = JSON.stringify(data);
     }
 
-    console.log(moment().toDate(), data);
+    console.log(moment().toString(), data);
   }
 }
 

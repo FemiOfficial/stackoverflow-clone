@@ -27,4 +27,9 @@ questionRouter.get('/byid/:id',
 questionRouter.patch('/vote/:questionid/:action',
   validateAccessToken,
   questioncontrollers.voteQuestion);
+
+questionRouter.patch('/:action/:questionid/',
+  validateAccessToken,
+  questioncontrollers.handleSubscription);
+
 export default questionRouter;
