@@ -1,7 +1,9 @@
+/* eslint-disable import/no-unresolved */
 import {
   saveQuestion, getAllQuestions, getQuestionsByTag,
   viewQuestionById, upVoteQuestion, downVoteQuestion,
-  getQuestionById,
+  getQuestionById, subscribe, unsubscribe, deleteQuestionById,
+  getAllQuestionsAskByUser, getQuestionByBody,
 } from '../services/question.services';
 
 import Response from '../helpers/Response';
@@ -92,6 +94,99 @@ class QuestionController {
       } else {
         return Response.handleError(response, codes.badRequest, 'invalid action parameter (up or down vote actions))');
       }
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async deleteQuestion(request, response) {
+    try {
+      const { questionid } = request.params;
+      const question = await getQuestionById(questionid);
+
+      const user = utils.getUserFromToken(request);
+
+      if (question === null || question === []) {
+        return Response.handleError(response, codes.notFound, 'invalid question id (not found)');
+      }
+
+      if (user.username !== question.user.username) {
+        return Response.handleError(response, codes.badRequest, 'invalid user, only user that ask question can delete');
+      }
+
+      deleteQuestionById(questionid)
+        .then((data) => Response.success(response, codes.success, data, `Question with id: ${questionid}, deleted successfully`, 'nodata'))
+        .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async handleSubscription(request, response) {
+    try {
+      const { questionid, action } = request.params;
+      const question = await getQuestionById(questionid);
+      const user = utils.getUserFromToken(request);
+
+      if (user.username !== question.user.username) {
+        return Response.handleError(response, codes.badRequest, 'invalid user, only user that ask question can request subscription');
+      }
+
+      if (question === null || question === []) {
+        return Response.handleError(response, codes.notFound, 'invalid question id (not found)');
+      }
+
+      if (question.subscribed && action === 'subscribe') {
+        return Response.handleError(response, codes.conflict, `Question with id: ${questionid} already subscribed to answers notification`);
+      }
+
+      if (!question.subscribed && action === 'unsubscribe') {
+        return Response.handleError(response, codes.conflict, `Question with id: ${questionid} already not subscribed to answers notification`);
+      }
+
+      if (action === 'subscribe') {
+        subscribe(questionid)
+          .then((data) => Response.success(response, codes.success, data, 'successfully subscribed to answer notification'))
+          .catch((err) => Response.handleError(response, codes.serverError, err));
+      } else if (action === 'unsubscribe') {
+        unsubscribe(questionid)
+          .then((data) => Response.success(response, codes.success, data, 'successfully unsubscribed from answer notification'))
+          .catch((err) => Response.handleError(response, codes.serverError, err));
+      } else {
+        return Response.handleError(response, codes.badRequest, 'invalid request parameter (subscribe or unsubscribe)');
+      }
+
+
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async viewQuestionsByUser(request, response) {
+    try {
+      const user = utils.getUserFromToken(request);
+
+      getAllQuestionsAskByUser(user.username)
+        .then((data) => {
+          if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, `No question asked by ${user.username}`);
+          return Response.success(response, codes.success, data, `All Questions asked by ${user.username}`);
+        })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async searchQuestion(request, response) {
+    try {
+      const { question } = request.body;
+
+      getQuestionByBody(question)
+        .then((data) => {
+          if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, 'No question related to search');
+          return Response.success(response, codes.success, data, 'All Questions related to search');
+        })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);
     }

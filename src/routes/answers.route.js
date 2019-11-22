@@ -32,4 +32,8 @@ answerRouter.patch('/vote/:answerid/:action',
   validateAccessToken,
   answerControllers.voteAnswer);
 
+answerRouter.delete('/:answerid',
+  validateAccessToken,
+  answerControllers.deleteAnswer);
+
 export default answerRouter;

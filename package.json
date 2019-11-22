@@ -9,7 +9,10 @@
     "build": "npm run clean && babel ./src -d build --copy-files",
     "dev": "nodemon ./src/app.js --exec babel-node ",
     "start": "set NODE_ENV=production && npm run build && node ./build/app.js",
-    "start:pm2": "set NODE_ENV=production && npm run build && pm2 start ./build/app.js --name stackoverflow-api"
+    "start:pm2": "set NODE_ENV=production && npm run build && pm2 start ./build/app.js --name stackoverflow-api",
+    "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
+    "coveralls-coverage": "coveralls < lcov.info",
+    "coverage": "npm run test && npm run generate-lcov  && npm run coveralls-coverage"
   },
   "keywords": [],
   "author": "femiofficial",
@@ -49,6 +52,7 @@
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
     "coveralls": "^3.0.7",
+    "codeclimate-test-reporter": "^0.5.1",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-standard": "^14.1.0",

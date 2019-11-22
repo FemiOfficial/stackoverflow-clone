@@ -5,7 +5,7 @@ import { handleValidationError, handleError } from '../helpers/Response';
 
 class AnswersValidators {
   validatePostAnswerRequest(request, response, next) {
-    try {
+    // try {
       const { body } = request;
       const errors = [];
 
@@ -19,9 +19,9 @@ class AnswersValidators {
 
       next();
 
-    } catch (error) {
-      return handleError(response, codes.serverError, error)
-    }
+    // } catch (error) {
+    //   return handleError(response, codes.serverError, error)
+    // }
   }
 }
 
