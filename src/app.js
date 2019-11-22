@@ -22,7 +22,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
 Logger.log(NODE_ENV);
 Logger.log(config[NODE_ENV]);
-if (NODE_ENV === 'production') {
+if (process.env.NODE_ENV) {
   mongoose.connect(config[NODE_ENV].DATABASE_URL, (err) => {
     if (err) Logger.log(err);
     else { Logger.log(`Connected to mongodb successfully on ${NODE_ENV}`); }
