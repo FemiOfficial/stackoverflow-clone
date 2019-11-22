@@ -355,7 +355,7 @@ describe('Answers Endpoints', () => {
         });
     });
 
-    it('should get answers by questionid successfully', (done) => {
+    it('should get all answers with questionid successfully', (done) => {
       chai.request(app)
         .get(`/v1/answers/byquestion/all/${testquestion.id}`)
         .set('authorization', user1Authorization)
@@ -406,7 +406,7 @@ describe('Answers Endpoints', () => {
         });
     });
 
-    it('should get answers by questionid successfully', (done) => {
+    it('should get accepted answers by questionid successfully', (done) => {
       chai.request(app)
         .get(`/v1/answers/byquestion/accepted/${testquestion.id}`)
         .set('authorization', user1Authorization)
