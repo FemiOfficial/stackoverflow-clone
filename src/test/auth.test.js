@@ -69,8 +69,22 @@ describe('User Authentication Endpoints [Login and Signup]', () => {
 
   deleteUserByUsername('maintest');
 
-
   describe('POST /v1/auth/signup && /v1/auth/signin', () => {
+    it('throws error with invalid username', (done) => {
+      chai.request(app)
+        .post('/v1/auth/signin')
+        .send(testcases.validReg)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.message).to.eqls('Invalid username');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
     it('create a new user', (done) => {
       chai.request(app)
         .post('/v1/auth/signup')
