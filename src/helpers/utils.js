@@ -46,7 +46,6 @@ const Utils = {
       user: process.env.EMAIL_ADDRESS,
       pass: process.env.EMAIL_PASSWORD,
     };
-    Logger.log(auth);
 
     const mailOptions = {
       from: 'StackOverFlow Clone',
