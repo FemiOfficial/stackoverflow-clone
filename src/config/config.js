@@ -17,7 +17,7 @@ const config = {
     },
   },
   production: {
-    DATABASE_URL: `${process.env.DATABASE_URL_PROD}`,
+    DATABASE_URL: `${process.env.MONGODB_URI}`,
     SECRET_KEY: process.env.API_SECRET_KEY,
     options: {
       user: process.env.MDB_LIVE_USRNAME,
