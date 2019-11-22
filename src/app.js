@@ -21,7 +21,7 @@ mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
 Logger.log(NODE_ENV);
-Logger.LOG(config[NODE_ENV]);
+Logger.log(config[NODE_ENV]);
 if (NODE_ENV === 'production') {
   mongoose.connect(config[NODE_ENV].DATABASE_URL, (err) => {
     if (err) Logger.log(err);
