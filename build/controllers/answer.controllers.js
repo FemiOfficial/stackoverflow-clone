@@ -231,7 +231,7 @@ var AnswerControllers = function () {
                 }
 
                 (0, _answers.downVoteAnswer)(answerid).then(function (data) {
-                  return _Response2.default.success(response, _statusCodes2.default.success, data, 'Answer with id: ' + answerid + ', voted up successfully');
+                  return _Response2.default.success(response, _statusCodes2.default.success, data, 'Answer with id: ' + answerid + ', voted down successfully');
                 }).catch(function (err) {
                   return _Response2.default.handleError(response, _statusCodes2.default.serverError, err);
                 });
