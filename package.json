@@ -8,7 +8,7 @@
     "clean": "rm -rf build && mkdir build",
     "build": "npm run clean && babel ./src -d build --copy-files",
     "dev": "nodemon ./src/app.js --exec babel-node ",
-    "start": "set NODE_ENV=production && npm run build && node ./build/app.js",
+    "start": "set NODE_ENV=production && node ./build/app.js",
     "start:pm2": "set NODE_ENV=production && npm run build && pm2 start ./build/app.js --name stackoverflow-api",
     "generate-lcov": "nyc report --reporter=text-lcov > lcov.info",
     "coveralls-coverage": "coveralls < lcov.info",
