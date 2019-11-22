@@ -26,11 +26,9 @@ User can view questions by tag, id, and all question on the platform
 * 14. Users can view all answers to qustion on the platform.
 * 15. Users can view all question on the platform.
 
-<!-- ## Deployment
-* This app is deployed on Heroku ::: https://stackoverflowcloneapi.herokuapp.com
-* Documentation on [Apiary.io](https://stackreflow.docs.apiary.io)
-* Documentation with [Postman.io](https://stackreflow.docs.apiary.io)
--->
+## Deployment
+* This app is deployed on Heroku ::: https://stackoverflowcloneapi.herokuapp.com/v1
+* Documentation on [Apiary.io](https://stackoverflowcloneapi.docs.apiary.io)
 
 ## Technology used
 [Node js](https://nodejs.org/en/)

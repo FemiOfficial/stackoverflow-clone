@@ -86,7 +86,7 @@ class AnswerControllers {
           .catch((err) => Response.handleError(response, codes.serverError, err));
       } else if (action === 'down') {
         downVoteAnswer(answerid)
-          .then((data) => Response.success(response, codes.success, data, `Answer with id: ${answerid}, voted up successfully`))
+          .then((data) => Response.success(response, codes.success, data, `Answer with id: ${answerid}, voted down successfully`))
           .catch((err) => Response.handleError(response, codes.serverError, err));
       } else {
         return Response.handleError(response, codes.badRequest, 'invalid action parameter (up or down vote actions))');
