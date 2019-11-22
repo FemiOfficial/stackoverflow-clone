@@ -1,6 +1,6 @@
 import express from 'express';
 import trimInputs from '../middlewares/trimInputs';
-import { validateAskPayload } from '../middlewares/question.validations';
+import { validateAskPayload, validateSearchPayload } from '../middlewares/question.validations';
 import { validateAccessToken } from '../middlewares/auth.validations';
 import questioncontrollers from '../controllers/question.controllers';
 
@@ -16,9 +16,18 @@ questionRouter.get('/',
   validateAccessToken,
   questioncontrollers.viewAllQuestions);
 
+questionRouter.get('/byuser',
+  validateAccessToken,
+  questioncontrollers.viewQuestionsByUser);
+
 questionRouter.get('/bytag/:tag',
   validateAccessToken,
   questioncontrollers.viewQuestionsWithATag);
+
+questionRouter.get('/search',
+  validateAccessToken,
+  validateSearchPayload,
+  questioncontrollers.searchQuestion);
 
 questionRouter.get('/byid/:id',
   validateAccessToken,

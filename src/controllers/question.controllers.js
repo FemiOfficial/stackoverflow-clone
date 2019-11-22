@@ -3,6 +3,7 @@ import {
   saveQuestion, getAllQuestions, getQuestionsByTag,
   viewQuestionById, upVoteQuestion, downVoteQuestion,
   getQuestionById, subscribe, unsubscribe, deleteQuestionById,
+  getAllQuestionsAskByUser, getQuestionByBody,
 } from '../services/question.services';
 
 import Response from '../helpers/Response';
@@ -156,6 +157,36 @@ class QuestionController {
       }
 
 
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async viewQuestionsByUser(request, response) {
+    try {
+      const user = utils.getUserFromToken(request);
+
+      getAllQuestionsAskByUser(user.username)
+        .then((data) => {
+          if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, `No question asked by ${user.username}`);
+          return Response.success(response, codes.success, data, `All Questions asked by ${user.username}`);
+        })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async searchQuestion(request, response) {
+    try {
+      const { question } = request.body;
+
+      getQuestionByBody(question)
+        .then((data) => {
+          if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, 'No question related to search');
+          return Response.success(response, codes.success, data, 'All Questions related to search');
+        })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);
     }

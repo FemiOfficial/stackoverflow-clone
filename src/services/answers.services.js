@@ -56,7 +56,6 @@ class AnswerServices {
   viewAnswersByQuestionIdAnswered(questionid) {
     return new Promise((resolve, reject) => {
       AnswerModel.find(
-        // { 'question._id': questionid },
         { 'question.answered': true },
         '-_id question user body accepted vote_count', (err, doc) => {
           if (err) reject(err);
@@ -75,6 +74,16 @@ class AnswerServices {
         const answers = doc.filter((i) => i.question._id == questionid);
 
         resolve(answers);
+      });
+    });
+  }
+
+  viewAnswersByUser(username) {
+    return new Promise((resolve, reject) => {
+      AnswerModel.find({ 'user.username': username }, '-_id question user body accepted vote_count', (err, doc) => {
+        if (err) reject(err);
+
+        resolve(doc);
       });
     });
   }

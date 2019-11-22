@@ -393,6 +393,87 @@ describe('Questions Endpoints [POST(ask) and GET(view)]', () => {
     });
   });
 
+  describe('GET /v1/questions/byuser', () => {
+    it('should successfully get questions by user', (done) => {
+      chai.request(app)
+        .get('/v1/questions/byuser')
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .get('/v1/questions/byuser')
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+  });
+
+  describe('GET /v1/questions/search', () => {
+    it('should throw error for invalid request parameter', (done) => {
+      chai.request(app)
+        .get('/v1/questions/search')
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.message).to.eqls('Incomplete(Invalid) Request Payload');
+          expect(res.body.status).to.eqls(400);
+          expect(res.body.error).to.be.an('array');
+
+          done();
+        });
+    });
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .get('/v1/questions/search')
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should search for question successfully', (done) => {
+      chai.request(app)
+        .get('/v1/questions/search')
+        .set('authorization', authorization)
+        .send({ question: testcases.validQuestion.body })
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.data).to.be.an('array');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+  });
+
   describe('PATCH /v1/questions/:action/:questionid/', () => {
     it('should throw error for invalid request parameter', (done) => {
       chai.request(app)

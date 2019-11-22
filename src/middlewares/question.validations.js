@@ -38,6 +38,25 @@ class QuestionValidators {
       return handleError(response, codes.serverError, error);
     }
   }
+
+  validateSearchPayload(request, response, next) {
+    try {
+      const { question } = request.body;
+      const errors = [];
+
+      if (!question || question === null || isEmpty(question)) {
+        errors.push('question string is required')
+      }
+
+      if (errors.length !== 0) {
+        return handleValidationError(response, codes.badRequest, errors);
+      }
+
+      next();
+    } catch (error) {
+      return handleError(response, codes.serverError, error);
+    }
+  }
 }
 
 module.exports = new QuestionValidators();

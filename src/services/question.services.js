@@ -33,7 +33,24 @@ class QuestionServices {
     });
   }
 
-  // TODO: Search with regex
+  getAllQuestionsAskByUser(username) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.find({ 'user.username': username }, '_id title body view_count answer_count subscribed answered tags ', (err, doc) => {
+        if (err) reject(err);
+        resolve(doc);
+      });
+    });
+  }
+
+  getQuestionByBody(body) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.find({ body }, '_id user title body view_count answer_count subscribed answered tags ', (err, doc) => {
+        if (err) reject(err);
+        resolve(doc);
+      });
+    });
+  }
+
   getQuestionsByTag(tag) {
     return new Promise((resolve, reject) => {
       QuestionModel.find({ tags: tag }, '_id user title body view_count subscribed answer_count answered tags ', (err, doc) => {

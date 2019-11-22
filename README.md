@@ -13,11 +13,11 @@ User can view questions by tag, id, and all question on the platform
 * 1. Users can create an account and log in.
 * 2. Users can post questions.
 * 4. Users can post answers
-* 4. 
+* 4. Users can delete questions
+* 5. Users can delete answers
 * 5. Users can view the answers to questions.
 * 6. User can accept a response out of all the responses to his/her question as the preferred answer.
 * 7. Users can upvote or downvote an answer.
-* 8. Users can comment on an answer.
 * 9. User can fetch all questions he/she has ever asked on the platform
 * 10. Users can search for questions on the platform
 * 11. Users can view all users.
