@@ -2,7 +2,7 @@
 import {
   saveQuestion, getAllQuestions, getQuestionsByTag,
   viewQuestionById, upVoteQuestion, downVoteQuestion,
-  getQuestionById, subscribe, unsubscribe,
+  getQuestionById, subscribe, unsubscribe, deleteQuestionById,
 } from '../services/question.services';
 
 import Response from '../helpers/Response';
@@ -93,6 +93,29 @@ class QuestionController {
       } else {
         return Response.handleError(response, codes.badRequest, 'invalid action parameter (up or down vote actions))');
       }
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async deleteQuestion(request, response) {
+    try {
+      const { questionid } = request.params;
+      const question = await getQuestionById(questionid);
+
+      const user = utils.getUserFromToken(request);
+
+      if (question === null || question === []) {
+        return Response.handleError(response, codes.notFound, 'invalid question id (not found)');
+      }
+
+      if (user.username !== question.user.username) {
+        return Response.handleError(response, codes.badRequest, 'invalid user, only user that ask question can delete');
+      }
+
+      deleteQuestionById(questionid)
+        .then((data) => Response.success(response, codes.success, data, `Question with id: ${questionid}, deleted successfully`, 'nodata'))
+        .catch((err) => Response.handleError(response, codes.serverError, err));
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);
     }

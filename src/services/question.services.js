@@ -1,11 +1,11 @@
+/* eslint-disable import/no-cycle */
 import QuestionModel from '../db/models/questions.model';
 import { getUserByUsernameAndReturnWithId } from './auth.services';
+import { deleteAnswersByQuestionId } from './answers.services';
 
 class QuestionServices {
   async saveQuestion(username, question) {
     const user = await getUserByUsernameAndReturnWithId(username);
-
-    // const tags = question.tags.map(i => { return i.toLowerCase(); });
 
     const newQuestion = {
       user,
@@ -67,12 +67,13 @@ class QuestionServices {
     });
   }
 
-  updateAnswerCount(id) {
+  updateAnswer(id) {
     return new Promise((resolve, reject) => {
       QuestionModel.findById(id, (err, doc) => {
         if (err) reject(err);
         if (doc !== null || doc !== []) {
           doc.answer_count += 1;
+          doc.answered = true;
           doc.save();
         }
         resolve(doc);
@@ -104,24 +105,20 @@ class QuestionServices {
     });
   }
 
-  updateAnsweredStatus(id) {
-    return new Promise((resolve, reject) => {
-      QuestionModel.findById(id, (err, doc) => {
-        if (err) reject(err);
-
-        doc.answered = true;
-        doc.answer_count += 1;
-
-        doc.save();
-        resolve(doc);
-      });
-    });
-  }
-
   deleteQuestionByTAG(tag) {
     return new Promise((resolve, reject) => {
       QuestionModel.findOneAndDelete({ tags: tag }, (error, response) => {
         if (error) reject(error);
+        resolve(response);
+      });
+    });
+  }
+
+  deleteQuestionById(id) {
+    return new Promise((resolve, reject) => {
+      QuestionModel.findOneAndDelete({ _id: id }, (error, response) => {
+        if (error) reject(error);
+        deleteAnswersByQuestionId(id);
         resolve(response);
       });
     });
@@ -149,4 +146,5 @@ class QuestionServices {
     });
   }
 }
+
 module.exports = new QuestionServices();

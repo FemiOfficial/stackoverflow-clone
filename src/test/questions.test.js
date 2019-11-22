@@ -500,4 +500,67 @@ describe('Questions Endpoints [POST(ask) and GET(view)]', () => {
         });
     });
   });
+
+  describe('DELETE /v1/questions/:questionid/', () => {
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .delete(`/v1/questions/${testquestion._id}`)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should throw for invalid user trying to delete a question', (done) => {
+      chai.request(app)
+        .delete(`/v1/questions/${testquestion._id}`)
+        .set('authorization', authorization2)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(400);
+
+          expect(res.body.message).to.eqls('invalid user, only user that ask question can delete');
+
+          done();
+        });
+    });
+
+    it('should delete a question successfully', (done) => {
+      chai.request(app)
+        .delete(`/v1/questions/${testquestion._id}`)
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should throw an error for invalid questionid', (done) => {
+      chai.request(app)
+        .patch('/v1/questions/unsubscribe/5653t3t3522g')
+        .set('authorization', authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(500);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(500);
+
+          done();
+        });
+    });
+  });
 });

@@ -1,10 +1,10 @@
 /* eslint-disable import/no-unresolved */
 import {
   saveAnswer, getAnswerById, acceptAnswer,
-  upVoteAnswer, downVoteAnswer, viewAnswerById,
+  upVoteAnswer, downVoteAnswer, viewAnswerById, deleteAnswerById,
   viewAnswersByQuestionIdAnswered, viewAnswersByQuestionIdAccepted,
 } from '../services/answers.services';
-import { getQuestionById, updateAnswerCount } from '../services/question.services';
+import { getQuestionById, updateAnswer } from '../services/question.services';
 import Response from '../helpers/Response';
 import codes from '../helpers/statusCodes';
 import utils from '../helpers/utils';
@@ -15,16 +15,15 @@ class AnswerControllers {
       const { body } = request.body;
       const { questionid } = request.params;
       const user = utils.getUserFromToken(request);
-      const question = await getQuestionById(questionid);
+      let question = await getQuestionById(questionid);
 
       if (question === null || question.length === 0) {
         return Response.handleError(response, codes.badRequest, 'invalid question id');
       }
 
+      question = await updateAnswer(question._id);
       saveAnswer(user, question, body)
         .then((data) => {
-          updateAnswerCount(question._id);
-
           if (question.subscribed === true) {
             const answernotification = {
               question,
@@ -143,6 +142,29 @@ class AnswerControllers {
           if (data === null || data.length === 0) return Response.handleError(response, codes.notFound, `Question with id: ${questionid} has no accepted answer`);
           return Response.success(response, codes.success, data, `Accepted answers for question with id: ${questionid}`);
         })
+        .catch((err) => Response.handleError(response, codes.serverError, err));
+    } catch (error) {
+      return Response.handleError(response, codes.serverError, error);
+    }
+  }
+
+  async deleteAnswer(request, response) {
+    try {
+      const { answerid } = request.params;
+      const answer = await getAnswerById(answerid);
+
+      const user = utils.getUserFromToken(request);
+
+      if (answer === null || answer === []) {
+        return Response.handleError(response, codes.notFound, 'invalid answer id (not found)');
+      }
+
+      if (user.username !== answer.user.username) {
+        return Response.handleError(response, codes.badRequest, 'invalid user, only user that answered can delete');
+      }
+
+      deleteAnswerById(answerid)
+        .then((data) => Response.success(response, codes.success, data, `Answer with id: ${answerid}, deleted successfully`, 'nodata'))
         .catch((err) => Response.handleError(response, codes.serverError, err));
     } catch (error) {
       return Response.handleError(response, codes.serverError, error);

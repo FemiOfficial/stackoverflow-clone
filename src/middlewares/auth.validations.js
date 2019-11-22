@@ -13,7 +13,7 @@ class AuthVlidations {
       return handleError(response, codes.badRequest,
         'token must be provided');
     }
-    try {
+    // try {
       const decoded = jwt.decode(request.headers.authorization);
 
       if (Date.now() >= decoded.exp * 1000) {
@@ -27,9 +27,9 @@ class AuthVlidations {
       }
 
       next();
-    } catch (error) {
-      return handleError(response, codes.serverError, error);
-    }
+    // } catch (error) {
+    //   return handleError(response, codes.serverError, error);
+    // }
   }
 
   validateLoginPayload(request, response, next) {

@@ -28,6 +28,10 @@ questionRouter.patch('/vote/:questionid/:action',
   validateAccessToken,
   questioncontrollers.voteQuestion);
 
+questionRouter.delete('/:questionid',
+  validateAccessToken,
+  questioncontrollers.deleteQuestion);
+
 questionRouter.patch('/:action/:questionid/',
   validateAccessToken,
   questioncontrollers.handleSubscription);

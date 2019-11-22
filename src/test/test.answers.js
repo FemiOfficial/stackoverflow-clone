@@ -423,4 +423,71 @@ describe('Answers Endpoints', () => {
         });
     });
   });
+
+  describe('DELETE /v1/answers/:answerid/', () => {
+
+    it('should throw error for token authorization', (done) => {
+      chai.request(app)
+        .delete(`/v1/answers/${testanswer._id}`)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.message).to.eqls('token must be provided');
+          expect(res.body.status).to.eqls(400);
+
+          done();
+        });
+    });
+
+    it('should throw for invalid user trying to delete a question', (done) => {
+      chai.request(app)
+        .delete(`/v1/answers/${testanswer._id}`)
+        .set('authorization', user2Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(400);
+          expect(res.body).to.have.property('message');
+          expect(res.body).to.be.an('object');
+          expect(res.body.status).to.eqls(400);
+
+          expect(res.body.message).to.eqls('invalid user, only user that answered can delete');
+
+          done();
+        });
+    });
+
+    it('should delete a answer successfully', (done) => {
+      chai.request(app)
+        .delete(`/v1/answers/${testanswer._id}`)
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(200);
+          expect(res.body).to.have.property('message');
+
+          expect(res.body).to.be.an('object');
+
+          expect(res.body.status).to.eqls(200);
+
+          done();
+        });
+    });
+
+    it('should throw an error for invalid answerid', (done) => {
+      chai.request(app)
+        .delete(`/v1/answers/${testquestion.id}`)
+        .set('authorization', user1Authorization)
+        .end((err, res) => {
+          expect(res.status).to.eqls(404);
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
+
+          expect(res.body.message).to.eqls('invalid answer id (not found)')
+
+          expect(res.body.status).to.eqls(404);
+
+          done();
+        });
+    });
+  });
 });

@@ -1,5 +1,4 @@
 import AnswerModel from '../db/models/answers.model';
-import { updateAnsweredStatus } from './question.services';
 
 class AnswerServices {
   async saveAnswer(user, question, answer) {
@@ -15,9 +14,6 @@ class AnswerServices {
     };
 
     const answermodel = new AnswerModel(newAnswer);
-    answermodel.question.answered = true;
-
-    updateAnsweredStatus(answermodel.question._id);
 
     return new Promise((resolve, reject) => {
       answermodel.save((err, doc) => {
@@ -115,6 +111,25 @@ class AnswerServices {
       });
     });
   }
+
+  deleteAnswersByQuestionId(questionid) {
+    return new Promise((resolve, reject) => {
+      AnswerModel.deleteMany({ 'question._id': questionid }, (error, response) => {
+        if (error) reject(error);
+        resolve(response);
+      });
+    });
+  }
+
+  deleteAnswerById(answerid) {
+    return new Promise((resolve, reject) => {
+      AnswerModel.findByIdAndDelete(answerid, (error, response) => {
+        if (error) reject(error);
+        resolve(response);
+      });
+    });
+  }
+
 }
 
 module.exports = new AnswerServices();
