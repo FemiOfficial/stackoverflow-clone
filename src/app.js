@@ -20,10 +20,20 @@ process.env.TZ = 'Africa/Lagos';
 mongoose.Promise = global.Promise;
 mongoose.set('useFindAndModify', false);
 mongoose.set('useUnifiedTopology', true);
-mongoose.connect(config[NODE_ENV].DATABASE_URL, config[NODE_ENV].options, (err) => {
-  if (err) Logger.log(err);
-  else { Logger.log(`Connected to mongodb successfully on ${NODE_ENV}`); }
-});
+
+if (process.env.NODE_ENV) {
+  mongoose.connect(config[NODE_ENV].DATABASE_URL, (err) => {
+    if (err) Logger.log(err);
+    else { Logger.log(`Connected to mongodb successfully on ${NODE_ENV}`); }
+  });
+} else {
+  mongoose.connect(config[NODE_ENV].DATABASE_URL, config[NODE_ENV].options, (err) => {
+    if (err) Logger.log(err);
+    else { Logger.log(`Connected to mongodb successfully on ${NODE_ENV}`); }
+  });
+}
+
+
 
 /** Enable Cross Origin Resource Sharing */
 app.use(cors());

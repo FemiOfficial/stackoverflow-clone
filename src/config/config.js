@@ -17,7 +17,7 @@ const config = {
     },
   },
   production: {
-    DATABASE_URL: `mongodb://localhost:${process.env.MDB_PORT}${process.env.DATABASE_URL}`,
+    DATABASE_URL: `${process.env.MONGODB_URI}`,
     SECRET_KEY: process.env.API_SECRET_KEY,
     options: {
       user: process.env.MDB_LIVE_USRNAME,
