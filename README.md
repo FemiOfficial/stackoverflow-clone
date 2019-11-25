@@ -26,6 +26,10 @@ User can view questions by tag, id, and all question on the platform
 * 14. Users can view all answers to qustion on the platform.
 * 15. Users can view all question on the platform.
 
+
+## CI/CD 
+* The api's CI/CD pipeline is implemented with [Travis] https://travis-ci.org/FemiOfficial/stackoverflow-clone
+
 ## Deployment
 * This app is deployed on Heroku ::: https://stackoverflowcloneapi.herokuapp.com/v1
 * Documentation on [Apiary.io](https://stackoverflowcloneapi.docs.apiary.io)
