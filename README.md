@@ -28,7 +28,7 @@ User can view questions by tag, id, and all question on the platform
 
 
 ## CI/CD 
-* The api's CI/CD pipeline is implemented with [travis-ci.org] https://travis-ci.org/FemiOfficial/stackoverflow-clone
+* The api's CI/CD pipeline is implemented with [travis-ci.org](https://travis-ci.org/FemiOfficial/stackoverflow-clone)
 
 ## Deployment
 * This app is deployed on Heroku ::: https://stackoverflowcloneapi.herokuapp.com/v1
