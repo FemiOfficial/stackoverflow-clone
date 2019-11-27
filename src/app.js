@@ -33,8 +33,6 @@ if (process.env.NODE_ENV) {
   });
 }
 
-
-
 /** Enable Cross Origin Resource Sharing */
 app.use(cors());
 
